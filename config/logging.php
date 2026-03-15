@@ -127,6 +127,38 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'payment' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/payment.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
+        'sync' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/sync.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
+        'notification' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/notification.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
+        'webhook' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/webhook.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => env('LOG_DAILY_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];
