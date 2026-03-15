@@ -22,6 +22,10 @@ class GroupController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+        ], [
+            'name.required' => 'Group name is required',
+            'name.string' => 'Group name must be a text value',
+            'name.max' => 'Group name cannot exceed 255 characters',
         ]);
 
         DB::beginTransaction();
@@ -80,6 +84,9 @@ class GroupController extends Controller
     {
         $request->validate([
             'identifier' => 'required|string',
+        ], [
+            'identifier.required' => 'Email or username is required',
+            'identifier.string' => 'Email or username must be a text value',
         ]);
 
         $group = Group::findOrFail($id);

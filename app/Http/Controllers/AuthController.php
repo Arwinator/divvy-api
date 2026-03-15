@@ -26,6 +26,19 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)],
             'fcm_token' => 'required|string',
             'device_id' => 'required|string',
+        ], [
+            'username.required' => 'Username is required',
+            'username.unique' => 'This username is already taken',
+            'username.max' => 'Username cannot exceed 255 characters',
+            'email.required' => 'Email address is required',
+            'email.email' => 'Please provide a valid email address',
+            'email.unique' => 'This email address is already registered',
+            'email.max' => 'Email address cannot exceed 255 characters',
+            'password.required' => 'Password is required',
+            'password.confirmed' => 'Password confirmation does not match',
+            'password.min' => 'Password must be at least 8 characters',
+            'fcm_token.required' => 'FCM token is required',
+            'device_id.required' => 'Device ID is required',
         ]);
 
         // Create user
@@ -70,6 +83,12 @@ class AuthController extends Controller
             'password' => 'required|string',
             'fcm_token' => 'required|string',
             'device_id' => 'required|string',
+        ], [
+            'email.required' => 'Email address is required',
+            'email.email' => 'Please provide a valid email address',
+            'password.required' => 'Password is required',
+            'fcm_token.required' => 'FCM token is required',
+            'device_id.required' => 'Device ID is required',
         ]);
 
         // Check credentials
@@ -165,6 +184,15 @@ class AuthController extends Controller
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
             'current_password' => 'required_with:password|string',
             'password' => ['sometimes', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
+        ], [
+            'username.unique' => 'This username is already taken',
+            'username.max' => 'Username cannot exceed 255 characters',
+            'email.email' => 'Please provide a valid email address',
+            'email.unique' => 'This email address is already registered',
+            'email.max' => 'Email address cannot exceed 255 characters',
+            'current_password.required_with' => 'Current password is required when changing password',
+            'password.confirmed' => 'Password confirmation does not match',
+            'password.min' => 'Password must be at least 8 characters',
         ]);
 
         $passwordChanged = false;
