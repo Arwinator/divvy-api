@@ -12,8 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'ensure.group.membership' => \App\Http\Middleware\EnsureGroupMembership::class,
+        ]);
+        
+        // Configure API authentication to return JSON instead of redirecting
+        $middleware->redirectGuestsTo(fn () => throw new \Illuminate\Auth\AuthenticationException());
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Ensure API requests always return JSON responses
+        $exceptions->shouldRenderJsonWhen(function ($request) {
+            return $request->is('api/*') || $request->expectsJson();
+        });
     })->create();
