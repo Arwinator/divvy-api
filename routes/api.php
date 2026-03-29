@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     // Invitation routes (no group membership check needed - checked in controller)
+    Route::get('/invitations', [GroupController::class, 'getInvitations']);
     Route::post('/invitations/{id}/accept', [GroupController::class, 'acceptInvitation']);
     Route::post('/invitations/{id}/decline', [GroupController::class, 'declineInvitation']);
     

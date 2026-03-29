@@ -74,6 +74,36 @@ class GroupController extends Controller
     }
 
     /**
+     * Get pending invitations for the authenticated user.
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getInvitations(Request $request)
+    {
+        $invitations = GroupInvitation::where('invitee_id', $request->user()->id)
+            ->where('status', 'pending')
+            ->with(['group', 'inviter'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Transform the data to include group name and inviter username
+        $transformedInvitations = $invitations->map(function ($invitation) {
+            return [
+                'id' => $invitation->id,
+                'group_id' => $invitation->group_id,
+                'group_name' => $invitation->group->name,
+                'inviter_id' => $invitation->inviter_id,
+                'inviter_username' => $invitation->inviter->username,
+                'status' => $invitation->status,
+                'created_at' => $invitation->created_at->toIso8601String(),
+            ];
+        });
+
+        return response()->json(['data' => $transformedInvitations]);
+    }
+
+    /**
      * Send a group invitation.
      * 
      * @param Request $request
