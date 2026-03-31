@@ -18,21 +18,11 @@ yarn-error.log
 /.idea
 /.vscode
 
-# Postman collection (local only, regenerated as needed)
-postman_collection.json
-
 # Temporary test and verification files
 test_*.php
 verify_*.php
-*_COMPLETION_REPORT.md
-*_FINAL_REPORT.md
-schema_verification_report.md
 
-# Internal documentation (keep only README.md public)
+
+# Internal documentation
 docs/
-!docs/README.md
-POSTMAN_GUIDE.md
-SETUP.md
-CHANGELOG.md
-*_GUIDE.md
-*_STRATEGY.md
+
