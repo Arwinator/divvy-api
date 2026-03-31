@@ -42,15 +42,23 @@ class CreateBillRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            // Only validate sum for custom split
-            if ($this->split_type === 'custom' && $this->has('shares')) {
-                $total = collect($this->shares)->sum('amount');
-                $expectedTotal = $this->total_amount;
+            // Only validate sum for custom split if no other validation errors exist
+            if ($this->split_type === 'custom' && $this->has('shares') && !$validator->errors()->any()) {
+                // Filter out non-numeric amounts before summing
+                $shares = collect($this->shares)->filter(function ($share) {
+                    return isset($share['amount']) && is_numeric($share['amount']);
+                });
+                
+                // Only check sum if all shares have valid numeric amounts
+                if ($shares->count() === count($this->shares)) {
+                    $total = $shares->sum('amount');
+                    $expectedTotal = $this->total_amount;
 
-                // Allow small rounding tolerance (0.01)
-                if (abs($total - $expectedTotal) > 0.01) {
-                    $validator->errors()->add('shares', 
-                        "The sum of shares ({$total}) must equal the total amount ({$expectedTotal})");
+                    // Allow small rounding tolerance (0.01)
+                    if (abs($total - $expectedTotal) > 0.01) {
+                        $validator->errors()->add('shares', 
+                            "The sum of shares ({$total}) must equal the total amount ({$expectedTotal})");
+                    }
                 }
             }
         });

@@ -24,28 +24,28 @@ class SendPushNotification implements ShouldQueue
      *
      * @var int
      */
-    protected $userId;
+    public $userId;
 
     /**
      * The notification title.
      *
      * @var string
      */
-    protected $title;
+    public $title;
 
     /**
      * The notification body.
      *
      * @var string
      */
-    protected $body;
+    public $body;
 
     /**
      * The notification data payload.
      *
      * @var array
      */
-    protected $data;
+    public $data;
 
     /**
      * Create a new job instance.
