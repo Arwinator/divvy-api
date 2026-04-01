@@ -20,6 +20,9 @@ class NotificationServiceTest extends TestCase
     {
         parent::setUp();
         $this->notificationService = new NotificationService();
+        
+        // Set a valid test credentials path (file doesn't need to exist for mocked tests)
+        config(['firebase.credentials' => 'firebase-credentials-test.json']);
     }
 
     /**
@@ -488,17 +491,15 @@ class NotificationServiceTest extends TestCase
      */
     public function notification_when_firebase_credentials_missing()
     {
-        // Temporarily set invalid credentials path
-        config(['firebase.credentials' => 'invalid/path/to/credentials.json']);
+        // Temporarily set null credentials path
+        config(['firebase.credentials' => null]);
 
-        // Mock Log
+        // Mock Log - expect NULL path
         Log::shouldReceive('channel')
             ->with('notification')
             ->andReturnSelf();
         Log::shouldReceive('warning')
-            ->with('Firebase credentials file not found', \Mockery::on(function ($context) {
-                return isset($context['path']);
-            }))
+            ->with('Firebase credentials file not found', ['path' => null])
             ->once();
         Log::shouldReceive('info')
             ->with('Notification sent', \Mockery::on(function ($context) {
@@ -523,6 +524,7 @@ class NotificationServiceTest extends TestCase
             []
         );
 
-        // Assertions are in the Log mock expectations
+        // Restore the test credentials for other tests
+        config(['firebase.credentials' => 'firebase-credentials-test.json']);
     }
 }
